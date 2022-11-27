@@ -3,16 +3,26 @@ import datetime
 import os
 import shutil
 
-
+ 
 def main():
 
     #Excel creation
+    show_file()
     current_date = get_current_date()
     filepath = get_parent_filepath()
     new_folder_directory = create_folder_by_date(current_date, filepath)
+    
     counter, text_dict = get_counter_from_csv(current_date)
     remove_and_add_text_file(text_dict, filepath)
+    
     create_excel_copy("Frysting excel test.xlsx", new_folder_directory, f"{current_date}_V_{counter}.xlsx")
+    hide_file()
+
+def hide_file():
+    os.system(f"attrib +h counter.csv")
+
+def show_file():
+    os.system(f"attrib -h counter.csv")
 
 def get_parent_filepath():
     filepath = pathlib.Path(__file__).parent.resolve()

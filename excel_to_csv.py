@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import pathlib
 import datetime
-
+from docxtpl import DocxTemplate
 
 
 EXCEL_NAME = "Frysting excel test"
@@ -13,10 +13,13 @@ ROW = "ROW"
 EXCEL_EXT = ".xlsx"
 CSV_EXT = ".csv"
 
+def word():
+
+
 def main():
 
     # Excel creation
-        # c
+    
         # Handled with the 'Create excel.py' script, to be executed manually
 
     # Dictionary creation
@@ -27,6 +30,7 @@ def main():
 
     # Word creation
     print_data(data_dict) # (Not done yet, just displays the data in the terminal)
+    script_filepath = get_filepath()
 
 def get_filepath():
     filepath = pathlib.Path(__file__).parent.resolve()
