@@ -16,7 +16,7 @@ CSV_EXT = ".csv"
 def main():
 
     # Excel creation
-    
+        # c
         # Handled with the 'Create excel.py' script, to be executed manually
 
     # Dictionary creation
