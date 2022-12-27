@@ -1,7 +1,13 @@
+### This needs to be changed and updated so that each file it creates takes a look at the number and type of fish
+### Instead of using counters stored in csv
+### 
+
+
 import pathlib
 import datetime
 import os
 import shutil
+
 
  
 def main():

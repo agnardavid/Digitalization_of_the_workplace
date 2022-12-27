@@ -34,14 +34,7 @@ def main():
 
 def get_filepath():
     filepath = pathlib.Path(__file__).parent.resolve()
-    backslash = "\\"
-    return_this = ""
-    for char in str(filepath):
-        if char == backslash:
-            return_this += "/"
-        else:
-            return_this += char
-    return return_this
+    return str(filepath).replace('\\', '/')
 
 def get_current_date():
     return datetime.date.today()
