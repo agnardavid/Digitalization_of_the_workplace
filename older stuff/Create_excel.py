@@ -1,15 +1,11 @@
 ### This needs to be changed and updated so that each file it creates takes a look at the number and type of fish
 ### Instead of using counters stored in csv
-### 
-
 
 import pathlib
 import datetime
 import os
 import shutil
 
-
- 
 def main():
 
     #Excel creation
@@ -83,13 +79,13 @@ def open_file(name, extension):
     with open(f"{name}{extension}") as filestream:
         return filestream.readlines()
 
-def create_folder_by_date(today, filepath) -> str:
-    path = os.path.join(filepath, today)
-    try:
-        os.mkdir(path)
-    except FileExistsError:
-        pass
-    return path
+# def create_folder_by_date(today, filepath) -> str:
+#     path = os.path.join(filepath, today)
+#     try:
+#         os.mkdir(path)
+#     except FileExistsError:
+#         pass
+#     return path
 
 def create_excel_copy(old_name, new_folder_directory, new_name):
     
