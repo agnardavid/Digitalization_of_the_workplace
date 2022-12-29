@@ -4,7 +4,7 @@
 import pathlib
 import os
 import shutil
-import csv
+from csv import DictReader, DictWriter, unix_dialect
 from tempfile import NamedTemporaryFile
 
 def main():
@@ -69,8 +69,8 @@ def update_file(updated_data: dict, filepath, dict_key) -> None:
     tempfile = NamedTemporaryFile("w+t", newline="", delete=False, encoding="utf-8")
     
     with open(filepath, mode="r+", newline="", encoding="utf-8") as csv_file, tempfile:
-        reader = csv.DictReader(csv_file, dialect=self.dialect)
-        writer = csv.DictWriter(tempfile, dialect=self.dialect)
+        reader = DictReader(csv_file, unix_dialect)
+        writer = DictWriter(tempfile, unix_dialect)
         writer.writeheader()
         for row in reader:
             if row[0] == dict_key:
