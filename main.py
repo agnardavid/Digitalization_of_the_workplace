@@ -4,9 +4,11 @@ from convert_data import Data_Conversion
 
 def main():
     filepath = get_filepath()
-    filename = "2-3kg"
-    test_data = Is_Sheet_Complete(filepath, filename)
-    print(test_data.converter.csv_file)
+    filename = get_filename()
+    test_sql = Data_Conversion()
+    test_sql.connect_to_sql_database("root", "49efTSH2", "Frysting_test", "frysting_test")
+    #test_data = Is_Sheet_Complete(filepath, filename)
+    #print(test_data.converter.csv_file)
 
 
 

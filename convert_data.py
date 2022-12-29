@@ -41,6 +41,6 @@ class Data_Conversion:
         # Connect to the database
         self.engine = sqlalchemy.create_engine(conn_str)
 
-    def dataframe_to_sql_table(self):
+    def dataframe_to_sql_table(self, table_name:str):
         # Write the dataframe to a table
-        self.dataframe.to_sql('table_name', self.engine, index=False)
+        self.dataframe.to_sql(table_name, self.engine, index=False)
