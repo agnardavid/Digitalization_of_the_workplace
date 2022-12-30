@@ -4,33 +4,53 @@
 import pathlib
 import os
 import shutil
-from csv import DictReader, DictWriter, unix_dialect
+from Data_conversion import CSV_Data_Conversion
 from tempfile import NamedTemporaryFile
 
 def main():
 
+    # folderpath and grandpath of the script
     filepath, grandpath = get_filepath()
-    #Excel creation
-    show_file(grandpath)
-    # current_date = get_current_date()
-    script_data_folder = f"{grandpath}/Script_data"
-    template_path = f"{grandpath}/Templates"
-    template_name = "2-3kg_Hábrún"
-    pallet_number = get_pallet_number(template_name, script_data_folder)
-    update_file({template_name:pallet_number}, script_data_folder, template_name)
     
+    show_file(grandpath)
+    
+    script_data_folder = f"{grandpath}/Script_data"
+
+    # Path to the counter file from the script location
+    counter_file = f"{grandpath}/Script_data/counter.csv"
+
+    # Path to the templates from the script location
+    template_path = f"{grandpath}/Templates"
+
+    # Template name
+    template_name = "2-3kg_Hábrún"
+    
+    # Template name without special characters
+    template_name_without_special_characters = "2-3kg_Habrun"
+
+    # Where is the template name going to be in the dataframe? top line is index 0
+    front_row_number = "2"
+
+    # The pallet number that the excel is going to have
+    pallet_number, pallet_number_dict = get_pallet_number(template_name_without_special_characters, counter_file)
+
     create_excel_copy(f"{template_path}", filepath, f"{template_name}_H{pallet_number}.xlsx", template_name)
+
+    update_csv(pallet_number_dict, script_data_folder, counter_file)
+    
     hide_file(grandpath)
 
 def hide_file(grandpath:str):
-    os.system(f"attrib +h {grandpath}/Script_data")
+    # Needs to be placed in a path without spaces to work
     os.system(f"attrib +h {grandpath}/Script_data/counter.csv")
+    os.system(f"attrib +h {grandpath}/Script_data")
 
 def show_file(grandpath:str):
+    # Needs to be placed in a path without spaces to work
     os.system(f"attrib +h {grandpath}/Script_data")
     os.system(f"attrib +h {grandpath}/Script_data/counter.csv")
 
-def get_filepath():
+def get_filepath() -> tuple[str,str]:
     # get the filepath and return the correct format
     filepath = pathlib.Path(__file__).parent.resolve()
     grandpath = os.path.dirname(filepath)
@@ -47,42 +67,24 @@ def get_pallet_number(dict_key, path_to_counter_csv) -> str:
     filestream = open_file(path_to_counter_csv)
 
     for line in filestream:
-        line_list = line.split(",")
+        stripped_line = line.strip()
+        line_list = stripped_line.split(",")
+        
 
         if line_list[0] == dict_key:
             current_version = int(line_list[1])
             pallet_number_dict[dict_key] = current_version + 1
           
         if line_list[0] != dict_key:
-            pallet_number_dict[line_list[0]] = int(line_list[1])
+            pallet_number_dict[line_list[0]] = line_list[1]
         
-    return int(pallet_number_dict[dict_key])
+    return pallet_number_dict[dict_key], pallet_number_dict
 
-def update_file(updated_data: dict, filepath, dict_key) -> None:
-    """Updates data in a row whose ID column matches the id in the passed dict.
-       Adds the data no row with the same ID exists already.
-    Args:
-        updated_data (dict): A dictionary with data to update or write.
-                             Keys in the dict must match values in counter.csv
-    """
-    
-    tempfile = NamedTemporaryFile("w+t", newline="", delete=False, encoding="utf-8")
-    
-    with open(filepath, mode="r+", newline="", encoding="utf-8") as csv_file, tempfile:
-        reader = DictReader(csv_file, unix_dialect)
-        writer = DictWriter(tempfile, unix_dialect)
-        writer.writeheader()
-        for row in reader:
-            if row[0] == dict_key:
-                row = updated_data
-                
-            writer.writerow(row)
-        csv_file.flush()
-        tempfile.flush()
-    shutil.move(tempfile.name, filepath)
+def update_csv(dict_to_write_csv:dict, script_data_folder:str, csv_path:str):
+    CSV_Data_Conversion(csv_path).update_csv(dict_to_write_csv, script_data_folder)
     
 def open_file(name):
-    with open(name) as filestream:
+    with open(name, encoding="utf8") as filestream:
         return filestream.readlines()
 
 def create_excel_copy(template_path, new_folder_directory, new_name, old_name):
@@ -90,8 +92,8 @@ def create_excel_copy(template_path, new_folder_directory, new_name, old_name):
     if os.path.isfile(f"{new_folder_directory}/{new_name}"):
         print(f"The file already exists in this directory {new_folder_directory}/{new_name}")
     else:
-        shutil.copy(template_path, new_folder_directory)
-        os.rename(f"{new_folder_directory}/{old_name}", f"{new_folder_directory}/{new_name}")
+        shutil.copy(f"{template_path}/{old_name}.xlsx", new_folder_directory)
+        os.rename(f"{new_folder_directory}/{old_name}.xlsx", f"{new_folder_directory}/{new_name}")
 
 if __name__ == "__main__":
     main()

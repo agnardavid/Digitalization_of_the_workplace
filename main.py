@@ -1,6 +1,6 @@
 import pathlib
 from is_sheet_complete import Is_Sheet_Complete
-from convert_data import Data_Conversion
+from Data_conversion import Excel_Data_Conversion
 
 def main():
     filepath = get_filepath()

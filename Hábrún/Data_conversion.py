@@ -1,6 +1,4 @@
-
-import pathlib
-import csv
+import os
 import pandas as pd
 import sqlalchemy
 
@@ -8,7 +6,7 @@ import sqlalchemy
 ## edit the csv files
 ## do the csv files include the headers?
 
-class Data_Conversion:
+class Excel_Data_Conversion:
     ''' 
     -------------------- INSTRUCTIONS! -------------------------------------
 
@@ -44,3 +42,21 @@ class Data_Conversion:
     def dataframe_to_sql_table(self, table_name:str):
         # Write the dataframe to a table
         self.dataframe.to_sql(table_name, self.engine, index=False)
+
+class CSV_Data_Conversion:
+
+    def __init__(self, csv_path:str) -> None:
+        self.csv_name = csv_path
+        self.df = pd.read_csv(csv_path)
+        self.df = self.df.astype(str)
+
+    def update_csv(self, a_dict, tempfile_folder):
+        
+        self.dfdict = pd.DataFrame.from_dict(a_dict, 'index') 
+        print(self.dfdict)
+        self.dfdict.index.names = ['NAME']
+        
+        # writing into the file
+        self.dfdict.reset_index().to_csv(f"{tempfile_folder}/counter_temp.csv", index=False)
+        os.remove(self.csv_name)
+        os.rename(f"{tempfile_folder}/counter_temp.csv", self.csv_name)
