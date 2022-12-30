@@ -75,7 +75,7 @@ def get_pallet_number(dict_key, path_to_counter_csv) -> str:
             current_version = int(line_list[1])
             pallet_number_dict[dict_key] = current_version + 1
           
-        if line_list[0] != dict_key:
+        if line_list[0] != dict_key and line_list[0] != "NAME":
             pallet_number_dict[line_list[0]] = line_list[1]
         
     return pallet_number_dict[dict_key], pallet_number_dict
