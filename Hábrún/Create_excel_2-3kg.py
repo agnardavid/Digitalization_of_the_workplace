@@ -12,7 +12,7 @@ def main():
     # folderpath and grandpath of the script
     filepath, grandpath = get_filepath()
     
-    show_file(grandpath)
+#    show_file(grandpath)
     
     script_data_folder = f"{grandpath}/Script_data"
 
@@ -28,9 +28,6 @@ def main():
     # Template name without special characters
     template_name_without_special_characters = "2-3kg_Habrun"
 
-    # Where is the template name going to be in the dataframe? top line is index 0
-    front_row_number = "2"
-
     # The pallet number that the excel is going to have
     pallet_number, pallet_number_dict = get_pallet_number(template_name_without_special_characters, counter_file)
 
@@ -38,17 +35,17 @@ def main():
 
     update_csv(pallet_number_dict, script_data_folder, counter_file)
     
-    hide_file(grandpath)
+#    hide_file(grandpath)
 
-def hide_file(grandpath:str):
-    # Needs to be placed in a path without spaces to work
-    os.system(f"attrib +h {grandpath}/Script_data/counter.csv")
-    os.system(f"attrib +h {grandpath}/Script_data")
+# def hide_file(grandpath:str):
+#     # Needs to be placed in a path without spaces to work
+#     os.system(f"attrib +h {grandpath}/Script_data/counter.csv")
+#     os.system(f"attrib +h {grandpath}/Script_data")
 
-def show_file(grandpath:str):
-    # Needs to be placed in a path without spaces to work
-    os.system(f"attrib +h {grandpath}/Script_data")
-    os.system(f"attrib +h {grandpath}/Script_data/counter.csv")
+# def show_file(grandpath:str):
+#     # Needs to be placed in a path without spaces to work
+#     os.system(f"attrib +h {grandpath}/Script_data")
+#     os.system(f"attrib +h {grandpath}/Script_data/counter.csv")
 
 def get_filepath() -> tuple[str,str]:
     # get the filepath and return the correct format

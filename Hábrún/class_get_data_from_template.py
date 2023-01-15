@@ -32,6 +32,18 @@ class Get_Data_From_Template():
     def get_pallet_number(self):
         '''Returns the current pallet number'''
         return self.df.loc[0]['PALLET NUMBER']
+    
+    def get_all_box_weights(self):
+        '''Returns a list of lists containing the weigths of all the individual boxes where each
+            list is a row'''
+        a_list_of_lists = []
+        
+        for i in range(9):
+            row_list = []
+            for j in range(3):
+                row_list.append(self.get_box_weight(i+1, j+1))
+            a_list_of_lists.append(row_list)
+        return a_list_of_lists
 
     def set_new_owner_name(self, new_owner_name):
         '''Sets a new owner name'''
@@ -40,4 +52,14 @@ class Get_Data_From_Template():
     def set_pallet_number(self, new_pallet_number:str):
         '''Sets a new pallet number'''
         self.df.loc[0,'PALLET NUMBER'] = new_pallet_number
+
+    def ready_template(self):
+        self.df['ROW'].round(decimals = 2)
+        self.df['BOX 1'].round(decimals = 2)
+        self.df['BOX 2'].round(decimals = 2)
+        self.df['BOX 3'].round(decimals = 2)
+        self.df['ROWSUM'].round(decimals = 2)
+        self.df['TOTAL'].round(decimals = 2)
+        return self.df
+
     

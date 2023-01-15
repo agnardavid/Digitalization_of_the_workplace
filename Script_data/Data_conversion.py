@@ -1,6 +1,4 @@
-
-import pathlib
-import csv
+import os
 import pandas as pd
 import sqlalchemy
 
@@ -50,10 +48,15 @@ class CSV_Data_Conversion:
     def __init__(self, csv_path:str) -> None:
         self.csv_name = csv_path
         self.df = pd.read_csv(csv_path)
+        self.df = self.df.astype(str)
 
-    def update_csv(self, front_row_value, column_value, new_value):
-        # updating the column value/data
-        self.df.loc[front_row_value, column_value] = new_value
-
+    def update_csv(self, a_dict, tempfile_folder):
+        
+        self.dfdict = pd.DataFrame.from_dict(a_dict, 'index') 
+        print(self.dfdict)
+        self.dfdict.index.names = ['NAME']
+        
         # writing into the file
-        self.df.to_csv(self.csv_name, index=False)
+        self.dfdict.reset_index().to_csv(f"{tempfile_folder}/counter_temp.csv", index=False)
+        os.remove(self.csv_name)
+        os.rename(f"{tempfile_folder}/counter_temp.csv", self.csv_name)
